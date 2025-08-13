@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>聖經靈修 - 與主同行的每一天</title>
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Microsoft JhengHei', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .user-section {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .user-section h3 {
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .user-input-group {
+            display: flex;
+            gap: 10px;
+            max-width: 400px;
+            margin: 0 auto;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .user-input {
+            flex: 1;
+            min-width: 200px;
+            padding: 12px 15px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            border-radius: 10px;
+            background: white;
+            color: #333;
+            font-size: 1rem;
+            font-family: inherit;
+        }
+
+        .login-btn {
+            padding: 12px 25px;
+            background: white;
+            color: #667eea;
+            border: 2px solid white;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+
+        .login-btn:hover {
+            background: #f0f4ff;
+            transform: translateY(-2px);
+        }
+
+        .current-user {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        .logout-btn {
+            background: transparent;
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            padding: 8px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-left: 10px;
+            font-size: 0.9rem;
+        }
+
+        .app-content {
+            opacity: 0.3;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .app-content.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 3px solid #e2e8f0;
+        }
+
+        .header h1 {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 3rem;
+            margin-bottom: 15px;
+            font-weight: 300;
+        }
+
+        .header .verse {
+            color: #718096;
+            font-style: italic;
+            font-size: 1.2rem;
+        }
+
+        .date-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            flex-wrap: wrap;
+        }
+
+        .date-picker {
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            background: white;
+        }
+
+        .date-nav-btn, .today-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 15px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border-left: 5px solid #667eea;
+        }
+
+        .section h2 {
+            color: #2d3748;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .section-icon {
+            font-size: 1.8rem;
+        }
+
+        textarea, input[type="text"] {
+            width: 100%;
+            padding: 18px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 1rem;
+            background: #f8f9fa;
+        }
+
+        textarea:focus, input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+        }
+
+        textarea {
+            min-height: 140px;
+            resize: vertical;
+        }
+
+        input[type="text"] {
+            margin-bottom: 15px;
+        }
+
+        .emotion-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .emotion-btn {
+            padding: 15px 20px;
+            border: 2px solid #e2e8f0;
+            background: white;
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        .emotion-btn:hover {
+            border-color: #667eea;
+            background: #f0f4ff;
+        }
+
+        .emotion-btn.active {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .save-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 18px 35px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: 600;
+            width: 100%;
+            margin-top: 30px;
+        }
+
+        .save-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .saved-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 20px;
+            border-radius: 12px;
+            margin-top: 20px;
+            text-align: center;
+            display: none;
+        }
+
+        .stats {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-item {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .history {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-top: 40px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .history-item {
+            padding: 20px;
+            border-left: 4px solid #667eea;
+            margin-bottom: 20px;
+            background: #f8f9fa;
+            border-radius: 0 12px 12px 0;
+        }
+
+        .history-date {
+            font-size: 0.95rem;
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        /* 情緒記錄樣式 */
+        .emotion-summary {
+            margin-bottom: 25px;
+        }
+
+        .emotion-summary p {
+            color: #2d3748;
+            font-weight: 500;
+            margin-bottom: 15px;
+        }
+
+        .emotion-journal {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 15px;
+        }
+
+        .emotion-journal-item {
+            background: white;
+            padding: 15px;
+            margin-bottom: 12px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        .emotion-journal-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .emotion-journal-date {
+            color: #667eea;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .emotion-journal-emotion {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: #f8f9fa;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .emotion-journal-content {
+            color: #2d3748;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .emotion-stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .emotion-stat-item {
+            text-align: center;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .emotion-stat-item:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+        }
+
+        .emotion-stat-icon {
+            font-size: 2rem;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .emotion-stat-label {
+            font-size: 0.9rem;
+            color: #2d3748;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .emotion-stat-count {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 25px;
+            }
+            
+            .header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .date-section {
+                flex-direction: column;
+            }
+            
+            .user-input-group {
+                flex-direction: column;
+            }
+            
+            .emotion-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 用戶登入區 -->
+        <div class="user-section">
+            <h3>👤 用戶登入</h3>
+            <div id="loginForm">
+                <div class="user-input-group">
+                    <input type="text" id="usernameInput" class="user-input" placeholder="請輸入您的姓名或暱稱" maxlength="20">
+                    <input type="password" id="passwordInput" class="user-input" placeholder="請設定密碼（至少4位）" maxlength="50">
+                    <button type="button" class="login-btn" id="loginBtn">登入</button>
+                </div>
+                <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.8;">
+                    首次使用請設定用戶名稱和密碼，之後用同樣的帳密登入
+                </p>
+            </div>
+            <div id="userInfo" style="display: none;">
+                <div class="current-user">
+                    <span>歡迎回來，<strong id="currentUsername"></strong>！</span>
+                    <button type="button" class="logout-btn" onclick="doLogout()">登出</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="app-content" id="appContent">
+            <div class="header">
+                <h1>📖 聖經靈修</h1>
+                <div class="verse">
+                    "聖經都是神所默示的，於教訓、督責、使人歸正、教導人學義都是有益的。" 
+                    <br><strong>- 提摩太後書 3:16</strong>
+                </div>
+            </div>
+
+            <!-- 日期選擇區 -->
+            <div class="date-section">
+                <button class="date-nav-btn" id="prevBtn">← 前一天</button>
+                <input type="date" id="datePicker" class="date-picker">
+                <button class="date-nav-btn" id="nextBtn">後一天 →</button>
+                <button class="today-btn" id="todayBtn">回到今天</button>
+            </div>
+
+            <!-- 今日經文記錄 -->
+            <div class="section">
+                <h2>
+                    <span class="section-icon">📖</span>
+                    今日經文
+                </h2>
+                <input type="text" id="verseReference" placeholder="經文出處（例：約翰福音 3:16）">
+                <textarea id="verseContent" placeholder="請輸入今日感動你的經文內容..."></textarea>
+            </div>
+
+            <!-- 今日靈修記錄 -->
+            <div class="section">
+                <h2>
+                    <span class="section-icon">🙏</span>
+                    今日靈修
+                </h2>
+                <textarea id="devotionContent" placeholder="記錄今日的靈修感動、禱告心得、與神的對話..."></textarea>
+            </div>
+
+            <!-- 今日情緒記錄 -->
+            <div class="section">
+                <h2>
+                    <span class="section-icon">❤️</span>
+                    今日情緒
+                </h2>
+                <div class="emotion-grid">
+                    <button class="emotion-btn" data-emotion="喜樂">😊 喜樂</button>
+                    <button class="emotion-btn" data-emotion="平安">😌 平安</button>
+                    <button class="emotion-btn" data-emotion="感恩">🙏 感恩</button>
+                    <button class="emotion-btn" data-emotion="盼望">✨ 盼望</button>
+                    <button class="emotion-btn" data-emotion="憂慮">😟 憂慮</button>
+                    <button class="emotion-btn" data-emotion="疲累">😴 疲累</button>
+                    <button class="emotion-btn" data-emotion="困惑">🤔 困惑</button>
+                    <button class="emotion-btn" data-emotion="渴慕">🔥 渴慕</button>
+                </div>
+            </div>
+
+            <!-- 情緒筆記 -->
+            <div class="section">
+                <h2>
+                    <span class="section-icon">📝</span>
+                    情緒筆記
+                </h2>
+                <textarea id="emotionNote" placeholder="描述今日的心情和情緒狀態、內心的感受、發生的事情..."></textarea>
+            </div>
+
+            <button class="save-btn" id="saveBtn">💾 保存記錄</button>
+            
+            <div class="saved-message" id="savedMessage">
+                ✅ 記錄已保存！願神祝福你的靈修生活！
+            </div>
+
+            <!-- 統計資訊 -->
+            <div class="stats">
+                <h3>📊 靈修統計</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number" id="totalDays">0</div>
+                        <div class="stat-label">總天數</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="thisWeek">0</div>
+                        <div class="stat-label">本週</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="thisMonth">0</div>
+                        <div class="stat-label">本月</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="streak">0</div>
+                        <div class="stat-label">連續天數</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 歷史記錄 -->
+            <div class="history">
+                <h3>📅 靈修記錄</h3>
+                <div id="historyList">
+                    <div class="history-item">
+                        <div class="history-date">開始你的靈修旅程</div>
+                        <div class="history-content">
+                            歡迎使用聖經靈修網站！願主與你同行每一天，在祂的話語中得著力量與智慧。
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 在靈修記錄下方加入情緒記錄 -->
+                <div style="margin-top: 30px;">
+                    <h3>❤️ 情緒記錄</h3>
+                    <div id="emotionJournal" class="emotion-journal">
+                        <div class="emotion-journal-item">
+                            <div class="emotion-journal-content">
+                                <p>情緒：${emotion}</p>
+                                <p>日期：${date}</p>
+                                <p>筆記：${note}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 登出函數 - 直接執行版本（移除確認對話框）
+        function doLogout() {
+            console.log('登出按鈕被點擊');
+            console.log('直接執行登出流程...');
+            
+            // 清除當前登入狀態
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            console.log('已清除用戶狀態');
+            
+            // 顯示登入表單，隱藏用戶資訊
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('userInfo').style.display = 'none';
+            document.getElementById('appContent').classList.remove('active');
+            
+            // 清空登入表單
+            document.getElementById('usernameInput').value = '';
+            document.getElementById('passwordInput').value = '';
+            
+            // 重置統計顯示
+            document.getElementById('totalDays').textContent = '0';
+            document.getElementById('thisWeek').textContent = '0';
+            document.getElementById('thisMonth').textContent = '0';
+            document.getElementById('streak').textContent = '0';
+            
+            // 重置歷史記錄顯示
+            document.getElementById('historyList').innerHTML = `
+                <div class="history-item">
+                    <div class="history-date">請登入查看您的靈修記錄</div>
+                    <div class="history-content">登入後可以查看您的個人靈修歷程</div>
+                </div>
+            `;
+            
+            console.log('登出完成！');
+        }
+
+        // 全域變數
+        let currentUser = null;
+        let selectedEmotion = null;
+        let currentDate = new Date().toISOString().split('T')[0];
+
+        // 等頁面完全載入後才執行
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('頁面載入完成');
+            
+            // 設定今天日期
+            document.getElementById('datePicker').value = currentDate;
+            
+            // 檢查是否有已登入用戶
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = savedUser;
+                showUserLoggedIn();
+            }
+            
+            // 綁定登入按鈕
+            document.getElementById('loginBtn').onclick = function() {
+                console.log('登入按鈕被點擊');
+                const username = document.getElementById('usernameInput').value.trim();
+                const password = document.getElementById('passwordInput').value.trim();
+                
+                if (!username) {
+                    alert('請輸入您的姓名或暱稱！');
+                    return;
+                }
+                
+                if (!password) {
+                    alert('請輸入密碼！');
+                    return;
+                }
+                
+                if (username.length > 20) {
+                    alert('名稱不能超過20個字元！');
+                    return;
+                }
+                
+                if (password.length < 4) {
+                    alert('密碼至少需要4位！');
+                    return;
+                }
+                
+                // 檢查用戶是否存在
+                const savedPassword = localStorage.getItem('user_' + username + '_password');
+                
+                if (savedPassword) {
+                    // 用戶存在，檢查密碼
+                    if (savedPassword !== password) {
+                        alert('密碼錯誤！');
+                        return;
+                    }
+                } else {
+                    // 新用戶，儲存密碼
+                    localStorage.setItem('user_' + username + '_password', password);
+                    alert('新用戶註冊成功！');
+                }
+                
+                // 執行登入
+                currentUser = username;
+                localStorage.setItem('currentUser', username);
+                showUserLoggedIn();
+                
+                console.log('登入成功:', username);
+            };
+            
+            // 綁定登出按鈕 - 修復版
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) {
+                logoutBtn.onclick = function() {
+                    console.log('登出按鈕被點擊');
+                    if (confirm('確定要登出嗎？您的資料會保留在本地。')) {
+                        currentUser = null;
+                        localStorage.removeItem('currentUser');
+                        showLoginForm();
+                        console.log('登出成功');
+                    }
+                };
+            } else {
+                console.log('找不到登出按鈕');
+            }
+            
+            // 綁定保存按鈕
+            document.getElementById('saveBtn').onclick = function() {
+                console.log('保存按鈕被點擊');
+                
+                if (!currentUser) {
+                    alert('請先登入！');
+                    return;
+                }
+                
+                const verseRef = document.getElementById('verseReference').value.trim();
+                const verseContent = document.getElementById('verseContent').value.trim();
+                const devotion = document.getElementById('devotionContent').value.trim();
+                
+                // 檢查情緒筆記元素
+                const emotionNoteElement = document.getElementById('emotionNote');
+                console.log('找到的情緒筆記元素:', emotionNoteElement);
+                
+                const emotionNote = emotionNoteElement ? emotionNoteElement.value.trim() : '';
+                
+                console.log('讀取到的值:');
+                console.log('- verseRef:', verseRef);
+                console.log('- verseContent:', verseContent);
+                console.log('- devotion:', devotion);
+                console.log('- emotionNote:', emotionNote);
+                console.log('- selectedEmotion:', selectedEmotion);
+                
+                if (!verseContent && !devotion && !emotionNote && !selectedEmotion) {
+                    alert('請至少填寫一項內容或選擇情緒！');
+                    return;
+                }
+                
+                const record = {
+                    date: currentDate,
+                    timestamp: Date.now(),
+                    verseReference: verseRef,
+                    verse: verseContent,
+                    devotion: devotion,
+                    emotion: selectedEmotion || '',
+                    emotionNote: emotionNote
+                };
+                
+                console.log('準備保存的記錄:', record);
+                
+                let records = JSON.parse(localStorage.getItem(getUserKey('records')) || '[]');
+                const existingIndex = records.findIndex(r => r.date === currentDate);
+                
+                if (existingIndex >= 0) {
+                    records[existingIndex] = record;
+                } else {
+                    records.push(record);
+                }
+                
+                records.sort((a, b) => new Date(b.date) - new Date(a.date));
+                localStorage.setItem(getUserKey('records'), JSON.stringify(records));
+                
+                console.log('記錄已保存');
+                
+                // 更新顯示
+                showSavedMessage();
+                updateStats();
+                updateHistory();
+                
+                console.log('已調用 updateHistory');
+            };
+            
+            // 綁定日期相關按鈕
+            document.getElementById('prevBtn').onclick = function() {
+                changeDate(-1);
+            };
+            
+            document.getElementById('nextBtn').onclick = function() {
+                changeDate(1);
+            };
+            
+            document.getElementById('todayBtn').onclick = function() {
+                goToToday();
+            };
+            
+            document.getElementById('datePicker').onchange = function() {
+                loadSelectedDate();
+            };
+            
+            // 綁定情緒按鈕
+            document.querySelectorAll('.emotion-btn').forEach(btn => {
+                btn.onclick = function() {
+                    document.querySelectorAll('.emotion-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    selectedEmotion = this.dataset.emotion;
+                };
+            });
+            
+            // Enter 鍵登入
+            document.getElementById('usernameInput').onkeypress = function(e) {
+                if (e.key === 'Enter') {
+                    document.getElementById('passwordInput').focus(); // 跳到密碼欄位
+                }
+            };
+            
+            document.getElementById('passwordInput').onkeypress = function(e) {
+                if (e.key === 'Enter') {
+                    document.getElementById('loginBtn').click(); // 執行登入
+                }
+            };
+            
+            // 初始化
+            updateStats();
+            updateHistory();
+            loadSelectedDate();
+        });
+        
+        function showUserLoggedIn() {
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('userInfo').style.display = 'block';
+            document.getElementById('currentUsername').textContent = currentUser;
+            document.getElementById('appContent').classList.add('active');
+        }
+        
+        function showLoginForm() {
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('userInfo').style.display = 'none';
+            document.getElementById('usernameInput').value = '';
+            document.getElementById('passwordInput').value = '';
+            document.getElementById('appContent').classList.remove('active');
+            clearForm();
+        }
+        
+        function getUserKey(key) {
+            return currentUser + '_' + key;
+        }
+        
+        function saveRecord() {
+            if (!currentUser) {
+                alert('請先登入！');
+                return;
+            }
+            
+            const verseRef = document.getElementById('verseReference').value.trim();
+            const verseContent = document.getElementById('verseContent').value.trim();
+            const devotion = document.getElementById('devotionContent').value.trim();
+            const emotionNote = document.getElementById('emotionNote').value.trim();
+            
+            if (!verseContent && !devotion && !emotionNote && !selectedEmotion) {
+                alert('請至少填寫一項內容或選擇情緒！');
+                return;
+            }
+            
+            const record = {
+                date: currentDate,
+                timestamp: Date.now(),
+                verseReference: verseRef,
+                verse: verseContent,
+                devotion: devotion,
+                emotion: selectedEmotion || '',
+                emotionNote: emotionNote
+            };
+            
+            let records = JSON.parse(localStorage.getItem(getUserKey('records')) || '[]');
+            const existingIndex = records.findIndex(r => r.date === currentDate);
+            
+            if (existingIndex >= 0) {
+                records[existingIndex] = record;
+            } else {
+                records.push(record);
+            }
+            
+            records.sort((a, b) => new Date(b.date) - new Date(a.date));
+            localStorage.setItem(getUserKey('records'), JSON.stringify(records));
+            
+            // 簡單直接更新，就像靈修筆記一樣
+            showSavedMessage();
+            updateStats();
+            updateHistory();
+        }
+        
+        function showSavedMessage() {
+            const msg = document.getElementById('savedMessage');
+            msg.style.display = 'block';
+            setTimeout(() => {
+                msg.style.display = 'none';
+            }, 3000);
+        }
+        
+        function changeDate(days) {
+            const date = new Date(currentDate);
+            date.setDate(date.getDate() + days);
+            currentDate = date.toISOString().split('T')[0];
+            document.getElementById('datePicker').value = currentDate;
+            loadSelectedDate();
+        }
+        
+        function goToToday() {
+            currentDate = new Date().toISOString().split('T')[0];
+            document.getElementById('datePicker').value = currentDate;
+            loadSelectedDate();
+        }
+        
+        function loadSelectedDate() {
+            currentDate = document.getElementById('datePicker').value;
+            
+            if (!currentUser) return;
+            
+            const records = JSON.parse(localStorage.getItem(getUserKey('records')) || '[]');
+            const record = records.find(r => r.date === currentDate);
+            
+            console.log('載入日期:', currentDate);
+            console.log('找到的記錄:', record);
+            
+            clearForm();
+            
+            if (record) {
+                document.getElementById('verseReference').value = record.verseReference || '';
+                document.getElementById('verseContent').value = record.verse || '';
+                document.getElementById('devotionContent').value = record.devotion || '';
+                document.getElementById('emotionNote').value = record.emotionNote || '';
+                
+                console.log('載入的情緒:', record.emotion);
+                
+                if (record.emotion) {
+                    const btn = document.querySelector(`[data-emotion="${record.emotion}"]`);
+                    console.log('找到的情緒按鈕:', btn);
+                    if (btn) {
+                        btn.classList.add('active');
+                        selectedEmotion = record.emotion;
+                        console.log('已恢復情緒選擇:', selectedEmotion);
+                    } else {
+                        console.log('找不到對應的情緒按鈕');
+                    }
+                }
+            } else {
+                console.log('沒有找到該日期的記錄');
+            }
+        }
+        
+        function clearForm() {
+            document.getElementById('verseReference').value = '';
+            document.getElementById('verseContent').value = '';
+            document.getElementById('devotionContent').value = '';
+            document.getElementById('emotionNote').value = '';
+            document.querySelectorAll('.emotion-btn').forEach(btn => btn.classList.remove('active'));
+            selectedEmotion = null;
+            console.log('表單已清空');
+        }
+        
+        function updateStats() {
+            if (!currentUser) {
+                document.getElementById('totalDays').textContent = '0';
+                document.getElementById('thisWeek').textContent = '0';
+                document.getElementById('thisMonth').textContent = '0';
+                document.getElementById('streak').textContent = '0';
+                return;
+            }
+            
+            const records = JSON.parse(localStorage.getItem(getUserKey('records')) || '[]');
+            document.getElementById('totalDays').textContent = records.length;
+            
+            const now = new Date();
+            const thisWeek = records.filter(r => {
+                const recordDate = new Date(r.date);
+                const daysDiff = Math.floor((now - recordDate) / (1000 * 60 * 60 * 24));
+                return daysDiff >= 0 && daysDiff < 7;
+            }).length;
+            
+            const thisMonth = records.filter(r => {
+                const recordDate = new Date(r.date);
+                return recordDate.getMonth() === now.getMonth() && 
+                       recordDate.getFullYear() === now.getFullYear();
+            }).length;
+            
+            document.getElementById('thisWeek').textContent = thisWeek;
+            document.getElementById('thisMonth').textContent = thisMonth;
+            
+            // 簡化的連續天數計算
+            let streak = 0;
+            const sortedRecords = records.sort((a, b) => new Date(b.date) - new Date(a.date));
+            for (let i = 0; i < Math.min(30, sortedRecords.length); i++) {
+                const expectedDate = new Date();
+                expectedDate.setDate(expectedDate.getDate() - i);
+                const expectedDateStr = expectedDate.toISOString().split('T')[0];
+                
+                if (sortedRecords.find(r => r.date === expectedDateStr)) {
+                    streak++;
+                } else {
+                    break;
+                }
+            }
+            document.getElementById('streak').textContent = streak;
+        }
+        
+        function updateHistory() {
+            if (!currentUser) return;
+            
+            const records = JSON.parse(localStorage.getItem(getUserKey('records')) || '[]');
+            const historyList = document.getElementById('historyList');
+            
+            if (records.length === 0) {
+                historyList.innerHTML = `
+                    <div class="history-item">
+                        <div class="history-date">開始你的靈修旅程</div>
+                        <div class="history-content">歡迎使用聖經靈修網站！</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            const recentRecords = records.slice(0, 5);
+            historyList.innerHTML = recentRecords.map(record => `
+                <div class="history-item">
+                    <div class="history-date">
+                        ${new Date(record.date).toLocaleDateString('zh-TW')}
+                        ${record.emotion ? ' - ' + record.emotion : ''}
+                    </div>
+                    <div class="history-content">
+                        ${record.verseReference ? '📖 ' + record.verseReference + '<br>' : ''}
+                        ${record.verse ? record.verse.substring(0, 100) + (record.verse.length > 100 ? '...' : '') + '<br>' : ''}
+                        ${record.devotion ? '🙏 ' + record.devotion.substring(0, 100) + (record.devotion.length > 100 ? '...' : '') : ''}
+                    </div>
+                </div>
+            `).join('');
+        }
+    </script>
+</body>
+</html>
