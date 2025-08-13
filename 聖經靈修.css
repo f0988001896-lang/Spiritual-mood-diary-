@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>聖經靈修 - 與主同行的每一天</title>
+    
+    <!-- SEO 優化 -->
+    <meta name="description" content="聖經靈修網站 - 記錄每日靈修心得、經文感動與屬靈成長軌跡">
+    <meta name="keywords" content="聖經靈修,基督教靈修,每日靈修,禱告日記,屬靈成長">
+    
+    <!-- PWA 支援 -->
+    <meta name="theme-color" content="#667eea">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="聖經靈修">
+    
+    <!-- 引入 CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 用戶登入區 -->
+        <div class="user-section">
+            <h3>👤 用戶登入</h3>
+            <div id="loginForm">
+                <div class="user-input-group">
+                    <input type="text" id="usernameInput" class="user-input" placeholder="請輸入您的姓名或暱稱" maxlength="20">
+                    <input type="password" id="passwordInput" class="user-input" placeholder="請設定密碼（至少4位）" maxlength="50">
+                    <button type="button" class="login-btn" id="loginBtn">登入</button>
+                </div>
+                <p style="margin-top: 10px; font-size: 0.9rem; opacity: 0.8;">
+                    首次使用請設定用戶名稱和密碼，之後用同樣的帳密登入
+                </p>
+            </div>
+            <div id="userInfo" style="display: none;">
+                <div class="current-user">
+                    <span>歡迎回來，<strong id="currentUsername"></strong>！</span>
+                    <button type="button" class="logout-btn" onclick="doLogout()">登出</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="app-content" id="appContent">
+            <div class="header">
+                <h1>📖 聖經靈修</h1>
+                <div class="verse">
+                    "聖經都是神所默示的，於教訓、督責、使人歸正、教導人學義都是有益的。" 
+                    <br><strong>- 提摩太後書 3:16</strong>
+                </div>
+            </div>
+
+            <!-- 日期選擇區 -->
+            <div class="date-section">
+                <button class="date-nav-btn" id="prevBtn">← 前一天</button>
+                <input type="date" id="datePicker" class="date-picker">
+                <button class="date-nav-btn" id="nextBtn">後一天 →</button>
+                <button class="today-btn" id="todayBtn">回到今天</button>
+            </div>
+
+            <!-- 今日經文記錄 -->
+            <div class="section">
+                <h2>
+                    <span class="section-icon">📖</span>
+                    今日經文
+                </h2>
+                <input type="text" id="verseReference" placeholder="經文出處（例：約翰福音 3:16）">
+                <textarea id="verseContent" placeholder="請輸入今日感動你的經文內容..."></textarea>
+            </div>
+
+            <!-- 今日靈修記錄 -->
+            <div class="section">
+                <h2>
+                    <span class="section-icon">🙏</span>
+                    今日靈修
+                </h2>
+                <textarea id="devotionContent" placeholder="記錄今日的靈修感動、禱告心得、與神的對話..."></textarea>
+            </div>
+
+            <!-- 今日情緒記錄 -->
+            <div class="section">
+                <h2>
+                    <span class="section-icon">❤️</span>
+                    今日情緒
+                </h2>
+                <div class="emotion-grid">
+                    <button class="emotion-btn" data-emotion="喜樂">😊 喜樂</button>
+                    <button class="emotion-btn" data-emotion="平安">😌 平安</button>
+                    <button class="emotion-btn" data-emotion="感恩">🙏 感恩</button>
+                    <button class="emotion-btn" data-emotion="盼望">✨ 盼望</button>
+                    <button class="emotion-btn" data-emotion="憂慮">😟 憂慮</button>
+                    <button class="emotion-btn" data-emotion="疲累">😴 疲累</button>
+                    <button class="emotion-btn" data-emotion="困惑">🤔 困惑</button>
+                    <button class="emotion-btn" data-emotion="渴慕">🔥 渴慕</button>
+                </div>
+            </div>
+
+            <!-- 情緒筆記 -->
+            <div class="section">
+                <h2>
+                    <span class="section-icon">📝</span>
+                    情緒筆記
+                </h2>
+                <textarea id="emotionNote" placeholder="描述今日的心情和情緒狀態、內心的感受、發生的事情..."></textarea>
+            </div>
+
+            <button class="save-btn" id="saveBtn">💾 保存記錄</button>
+            
+            <div class="saved-message" id="savedMessage">
+                ✅ 記錄已保存！願神祝福你的靈修生活！
+            </div>
+
+            <!-- 統計資訊 -->
+            <div class="stats">
+                <h3>📊 靈修統計</h3>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number" id="totalDays">0</div>
+                        <div class="stat-label">總天數</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="thisWeek">0</div>
+                        <div class="stat-label">本週</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="thisMonth">0</div>
+                        <div class="stat-label">本月</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" id="streak">0</div>
+                        <div class="stat-label">連續天數</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 歷史記錄 -->
+            <div class="history">
+                <h3>📅 靈修記錄</h3>
+                <div id="historyList">
+                    <div class="history-item">
+                        <div class="history-date">開始你的靈修旅程</div>
+                        <div class="history-content">
+                            歡迎使用聖經靈修網站！願主與你同行每一天，在祂的話語中得著力量與智慧。
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 在靈修記錄下方加入情緒記錄 -->
+                <div style="margin-top: 30px;">
+                    <h3>❤️ 情緒記錄</h3>
+                    <div id="emotionJournal" class="emotion-journal">
+                        <div class="emotion-journal-item">
+                            <div class="emotion-journal-content">
+                                尚無情緒記錄，開始記錄你的情緒狀態吧！
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 引入 JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
